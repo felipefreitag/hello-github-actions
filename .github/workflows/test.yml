@@ -17,6 +17,6 @@ jobs:
           bundler-cache: true
           ruby-version: '2.7'
       - run: gem install dpl
-      - run: dpl -v
+      - run: dpl --help
 
       - run: echo "I'm running on PR on main and push to main"
