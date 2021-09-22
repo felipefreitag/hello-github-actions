@@ -12,5 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - run: gem install dpl
+      - run: dpl -v
 
-      - run: echo "I'm running on PR on master and push to master"
+      - run: echo "I'm running on PR on main and push to main"
