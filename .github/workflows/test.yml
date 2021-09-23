@@ -21,6 +21,7 @@ jobs:
           GITHUB_CONTEXT: ${{ toJSON(github) }}
         run: echo "$GITHUB_CONTEXT"
 
+      - run: touch tmp/undercover-checkstyle.xml
       - run: echo "<foo>bar</foo>" > tmp/undercover-checkstyle.xml
 
       - name: Archive undercover-checkstyle results
