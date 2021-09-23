@@ -21,7 +21,9 @@ jobs:
           GITHUB_CONTEXT: ${{ toJSON(github) }}
         run: echo "$GITHUB_CONTEXT"
 
-      - run: echo "<foo>bar</foo>" > undercover-checkstyle.xml
+      - run: mkdir tmp
+
+      - run: echo "<foo>bar</foo>" > tmp/undercover-checkstyle.xml
 
       - name: Archive undercover-checkstyle results
         uses: actions/upload-artifact@v2
@@ -42,6 +44,22 @@ jobs:
           name: undercover-checkstyle
 
       - run: cat undercover-checkstyle.xml
+
+  artifacts-url-comment:
+    name: add artifact links to pull request and related issues job
+    needs: test
+    if: github.event_name == 'pull_request'
+    runs-on: windows-2019
+    steps:
+      - name: add artifact links to pull request
+        uses: tonyhallett/artifacts-url-comments@v1.1.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          prefix: Here are the artifacts
+          suffix: Have a nice day.
+          format: name
+          addTo: pull
 
   deploy-staging:
     name: Deploy staging
