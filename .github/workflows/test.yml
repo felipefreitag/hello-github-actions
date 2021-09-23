@@ -21,14 +21,13 @@ jobs:
           GITHUB_CONTEXT: ${{ toJSON(github) }}
         run: echo "$GITHUB_CONTEXT"
 
-      - run: touch tmp/undercover-checkstyle.xml
-      - run: echo "<foo>bar</foo>" > tmp/undercover-checkstyle.xml
+      - run: echo "<foo>bar</foo>" > undercover-checkstyle.xml
 
       - name: Archive undercover-checkstyle results
         uses: actions/upload-artifact@v2
         with:
           name: undercover-checkstyle
-          path: tmp/undercover-checkstyle.xml
+          path: undercover-checkstyle.xml
           retention-days: 10
 
   report-on-pr:
@@ -41,9 +40,8 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: undercover-checkstyle
-          path: tmp/
 
-      - run: cat tmp/undercover-checkstyle.xml
+      - run: cat undercover-checkstyle.xml
 
   deploy-staging:
     name: Deploy staging
