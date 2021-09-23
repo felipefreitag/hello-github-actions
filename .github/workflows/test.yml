@@ -29,7 +29,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: undercover-checkstyle
-          path: undercover-checkstyle.xml
+          path: tmp/undercover-checkstyle.xml
           retention-days: 10
 
   report-on-pr:
