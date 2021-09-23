@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Echo something
+    name: Push and PR on main
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -16,10 +16,15 @@ jobs:
       - name: show GH event
         run: echo ${{ github.event_name }}
 
-      - name: run only on PR
-        if: ${{ github.event_name == 'pull_request' }}
-        run: echo "Running only on PR"
+      - name: Run tests, reports, etc
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CONTEXT"
 
-      - name: run only on push
+      - name: Reports - run only on PR
+        if: ${{ github.event_name == 'pull_request' }}
+        run: echo "Adding comment to PR"
+
+      - name: Deploy staging - run only on merge
         if: ${{ github.event_name == 'push' }}
-        run: echo "Running only on push"
+        run: echo "Deploy to staging"
