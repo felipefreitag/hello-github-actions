@@ -13,4 +13,13 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - run: echo "I'm running on PR on master and push to master"
+      - name: show GH event
+        run: echo ${{ github.event_name }}
+
+      - name: run only on PR
+        if: ${{ github.event_name == 'pull_request' }}
+        run: echo "Running only on PR"
+
+      - name: run only on push
+        if: ${{ github.event_name == 'push' }}
+        run: echo "Running only on push"
