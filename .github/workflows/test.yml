@@ -21,9 +21,28 @@ jobs:
           GITHUB_CONTEXT: ${{ toJSON(github) }}
         run: echo "$GITHUB_CONTEXT"
 
-      - name: Reports - run only on PR
-        if: ${{ github.event_name == 'pull_request' }}
-        run: echo "Adding comment to PR"
+      - run: echo "<foo>bar</foo>" > tmp/undercover-checkstyle.xml
+
+      - name: Archive undercover-checkstyle results
+        uses: actions/upload-artifact@v2
+        with:
+          name: undercover-checkstyle
+          path: tmp/undercover-checkstyle.xml
+          retention-days: 10
+
+  report-on-pr:
+    name: Reports - run only on PR
+    if: github.event_name == 'pull_request'
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: undercover-checkstyle
+          path: tmp/
+
+      - run: cat tmp/undercover-checkstyle.xml
 
   deploy-staging:
     name: Deploy staging
