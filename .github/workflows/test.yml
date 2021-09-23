@@ -7,8 +7,8 @@ on:
     branches: [main]
 
 jobs:
-  build:
-    name: Push and PR on main
+  test:
+    name: Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -25,6 +25,14 @@ jobs:
         if: ${{ github.event_name == 'pull_request' }}
         run: echo "Adding comment to PR"
 
+  deploy-staging:
+    name: Deploy staging
+    needs: test
+    if: ${{ github.event_name == 'push' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
       - name: Deploy staging - run only on merge
-        if: ${{ github.event_name == 'push' }}
         run: echo "Deploy to staging"
