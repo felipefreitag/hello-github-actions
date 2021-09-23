@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Echo something
+    name: Push and PR on main
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
