@@ -21,6 +21,9 @@ jobs:
           GITHUB_CONTEXT: ${{ toJSON(github) }}
         run: echo "$GITHUB_CONTEXT"
 
+      - name: Link to action summary
+        run: echo "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
       - run: mkdir tmp
 
       - run: echo "<foo>bar</foo>" > tmp/undercover-checkstyle.xml
