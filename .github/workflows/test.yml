@@ -24,7 +24,7 @@ jobs:
       - name: Link to action summary
         run: |
           echo "Dummy file" > dummy.txt
-          echo "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> dummy.txt
+          echo "[CI summary and artifacts](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> dummy.txt
 
       - uses: marocchino/sticky-pull-request-comment@v2
         with:
