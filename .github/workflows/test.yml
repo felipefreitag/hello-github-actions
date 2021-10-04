@@ -22,7 +22,14 @@ jobs:
         run: echo "$GITHUB_CONTEXT"
 
       - name: Link to action summary
-        run: echo "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        run: |
+          echo "Dummy file" > dummy.txt
+          echo "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> dummy.txt
+
+      - uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          recreate: true
+          path: dummy.txt
 
       - run: mkdir tmp
 
@@ -47,31 +54,3 @@ jobs:
           name: undercover-checkstyle
 
       - run: cat undercover-checkstyle.xml
-
-  artifacts-url-comment:
-    name: add artifact links to pull request and related issues job
-    needs: test
-    if: github.event_name == 'pull_request'
-    runs-on: windows-2019
-    steps:
-      - name: add artifact links to pull request
-        uses: tonyhallett/artifacts-url-comments@v1.1.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          prefix: Here are the artifacts
-          suffix: Have a nice day.
-          format: name
-          addTo: pull
-
-  deploy-staging:
-    name: Deploy staging
-    needs: test
-    if: github.event_name == 'push'
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v1
-
-      - name: Deploy staging - run only on merge
-        run: echo "Deploy to staging"
