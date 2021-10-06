@@ -21,18 +21,37 @@ jobs:
           GITHUB_CONTEXT: ${{ toJSON(github) }}
         run: echo "$GITHUB_CONTEXT"
 
-      - name: Reports - run only on PR
-        if: ${{ github.event_name == 'pull_request' }}
-        run: echo "Adding comment to PR"
+      - name: Link to action summary
+        run: |
+          echo "Dummy file" > dummy.txt
+          echo "[CI summary and artifacts](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> dummy.txt
+          curl --help
 
-  deploy-staging:
-    name: Deploy staging
+      - uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          recreate: true
+          path: dummy.txt
+
+      - run: mkdir tmp
+
+      - run: echo "<foo>bar</foo>" > tmp/undercover-checkstyle.xml
+
+      - name: Archive undercover-checkstyle results
+        uses: actions/upload-artifact@v2
+        with:
+          name: undercover-checkstyle
+          path: tmp/undercover-checkstyle.xml
+          retention-days: 10
+
+  report-on-pr:
+    name: Reports - run only on PR
+    if: github.event_name == 'pull_request'
     needs: test
-    if: github.event_name == 'push'
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/download-artifact@v2
+        with:
+          name: undercover-checkstyle
 
-      - name: Deploy staging - run only on merge
-        run: echo "Deploy to staging"
+      - run: cat undercover-checkstyle.xml
