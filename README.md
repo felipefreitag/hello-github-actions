@@ -5,3 +5,5 @@ This course will walk you through writing your first action and using it with a 
 ### A random change
 
 #### foo
+
+#### bar
