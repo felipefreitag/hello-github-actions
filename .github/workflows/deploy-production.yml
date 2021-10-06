@@ -14,4 +14,5 @@ jobs:
           fetch-depth: 0
       - run: git branch
       - run: git checkout main
-      - run: git checkout origin/main
+      - run: git checkout -B production
+      - run: git push origin production --force
