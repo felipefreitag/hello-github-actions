@@ -13,7 +13,7 @@ jobs:
         id: slack
         uses: slackapi/slack-github-action@v1.15.0
         with:
-          payload: '{"url":"${{ github.event.pull_request.url }}","title":"${{ github.event.pull_request.title }}"}'
+          payload: '{"url":"${{ github.event.pull_request.html_url }}","title":"${{ github.event.pull_request.title }}"}'
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       - run: echo "${{ toJson(github.event) }}"
