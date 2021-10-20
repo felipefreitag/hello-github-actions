@@ -3,7 +3,6 @@ name: Post PR to Slack
 on:
   workflow_dispatch:
   pull_request:
-    types: [review_requested]
 
 jobs:
   post-pr:
@@ -14,4 +13,4 @@ jobs:
         uses: slackapi/slack-github-action@v1.14.0
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-      - run: echo ${{ github.context }}
+      - run: echo "${{ github.context }}"
