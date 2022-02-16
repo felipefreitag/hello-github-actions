@@ -19,3 +19,16 @@ jobs:
       - name: Echo variable
         run: |
           echo "-----${{ github.event.inputs.api-heroku-app}}----"
+      - name: Set API URL from input
+        if: github.event.inputs.api-heroku-app != 0
+        run: |
+          echo "REACT_APP_API_URL=https://${{ github.event.inputs.api-heroku-app }}.herokuapp.com" >> $GITHUB_ENV
+      
+      - name: Set API URL from PR
+        if: github.event.inputs.api-heroku-app == 0
+        run: |
+          echo "REACT_APP_API_URL=https://${{ env.staging-api }}-pr-XX.herokuapp.com" >> $GITHUB_ENV
+
+      - name: Echo env set
+        run: |
+          echo ${{ env.REACT_APP_API_URL }}
