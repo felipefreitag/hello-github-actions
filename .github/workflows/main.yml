@@ -1,5 +1,11 @@
 name: A workflow for my Hello World file
-on: push
+on: 
+  push:
+  workflow_dispatch:
+    inputs:
+      api-heroku-app:
+        description: 'The API the frontend will use. Example: myapp-staging'
+        required: true
 
 jobs:
   build:
@@ -10,3 +16,6 @@ jobs:
       - uses: ./action-a
         with:
           MY_NAME: "Mona"
+      - name: Echo variable
+        run: |
+          echo "-----${{ github.event.inputs.api-heroku-app}}----"
