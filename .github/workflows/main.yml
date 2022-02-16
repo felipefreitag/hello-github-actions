@@ -6,6 +6,10 @@ on:
       api-heroku-app:
         description: 'The API the frontend will use. Example: myapp-staging'
         required: true
+        default: env.default-api-app
+        
+env:
+  default-api-app: cockpit-api-staging
 
 jobs:
   build:
