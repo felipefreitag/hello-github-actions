@@ -30,7 +30,7 @@ jobs:
         run: |
           PR=$(echo "${{ github.event.pull_request.body}}" | grep API_PR | head -n1 | cut -d '=' -f2 | cut -d ' ' -f1)
           echo $PR
-          echo "PR_NUMBER=$PR" >> GITHUB_ENV
+          echo "PR_NUMBER=$(PR)" >> $GITHUB_ENV
           echo ${{ env.PR_NUMBER }}
 
       - uses: marocchino/sticky-pull-request-comment@v2
