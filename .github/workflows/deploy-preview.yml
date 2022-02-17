@@ -23,8 +23,8 @@ jobs:
         env:
           GITHUB_CONTEXT: ${{ toJSON(github.event) }}
         run: |
-          echo github.event.title
-          echo github.event.body
+          echo ${{ github.event.title }}
+          echo ${{ github.event.body }}
 
       - uses: marocchino/sticky-pull-request-comment@v2
         with:
