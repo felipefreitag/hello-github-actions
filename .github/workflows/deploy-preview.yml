@@ -2,6 +2,7 @@ name: Deploy preview
 
 on:
   pull_request:
+  issue_comment:
 
 jobs:
   test:
@@ -21,10 +22,23 @@ jobs:
       - name: Show GH event
         env:
           GITHUB_CONTEXT: ${{ toJSON(github.event) }}
-        run: echo "$GITHUB_CONTEXT"
+        run: |
+          echo github.event.title
+          echo github.event.body
 
       - uses: marocchino/sticky-pull-request-comment@v2
         with:
           header: foo
           recreate: true
           message: foo
+
+  pr_commented:
+    # This job only runs for pull request comments
+    name: PR comment
+    if: ${{ github.event.issue.pull_request }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo A comment on PR $NUMBER
+        env:
+          NUMBER: ${{ github.event.issue.number }}
