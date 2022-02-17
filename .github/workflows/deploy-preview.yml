@@ -29,7 +29,7 @@ jobs:
       - name: Extract command
         if: contains(${{ github.event.pull_request.body}}, 'API_PR=')
         run: |
-          PR=$(cat ${{ github.event.pull_request.body}} | grep API_PR | head -n1 | cut -d '=' -f2 | cut -d ' ' -f1)
+          PR=$(echo "${{ github.event.pull_request.body}}" | grep API_PR | head -n1 | cut -d '=' -f2 | cut -d ' ' -f1)
           echo "PR_NUMBER=$PR" >> GITHUB_ENV
 
       - uses: marocchino/sticky-pull-request-comment@v2
