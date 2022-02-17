@@ -1,0 +1,30 @@
+name: Deploy preview
+
+on:
+  pull_request:
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: show GH event
+        run: echo ${{ github.event_name }}
+
+      - name: Show GH context
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
+      - name: Show GH event
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github.event) }}
+        run: echo "$GITHUB_CONTEXT"
+
+      - uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: foo
+          recreate: true
+          message: foo
