@@ -1,0 +1,68 @@
+name: Deploy preview
+
+on: 
+  pull_request:
+  push:
+    branches: 
+      - release**
+  workflow_dispatch:
+    inputs:
+      api-heroku-app:
+        description: 'The API the frontend will use. Example: myapp-staging'
+        required: true
+
+jobs:
+  build-and-deploy:
+    name: Build and deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.3.4
+
+      - name: Set API app and Netlify alias from input
+        if: github.event.inputs.api-heroku-app != 0
+        run: |
+          echo "REACT_APP_API_URL=https://${{ github.event.inputs.api-heroku-app }}.herokuapp.com" >> $GITHUB_ENV
+          echo "NETLIFY_ALIAS=deploy-preview" >> $GITHUB_ENV
+
+      - name: Set API app and Netlify alias from PR
+        if: github.event.inputs.api-heroku-app == 0
+        run: |
+          echo "REACT_APP_API_URL=https://${{ env.preview-api }}-pr-${{ github.event.number }}.herokuapp.com" >> $GITHUB_ENV
+          echo "NETLIFY_ALIAS=deploy-preview-${{ github.event.number }}" >> $GITHUB_ENV
+
+      - name: start deployment
+        uses: bobheadxi/deployments@v0.6.2
+        id: deployment
+        with:
+          step: start
+          token: ${{ secrets.GITHUB_TOKEN }}
+          env: ${{ env.NETLIFY_ALIAS }}
+          ref: ${{ github.head_ref }}
+
+      - name: Build and deploy to netlify
+        run: |
+          echo "Using API URL: ${{ env.REACT_APP_API_URL }}"
+          echo "Using Netlify alias: ${{ env.NETLIFY_ALIAS }}"
+          echo "window.env = { REACT_APP_API_URL: '${{ env.REACT_APP_API_URL }}' }" > public/env-config.js
+          export NETLIFY_AUTH_TOKEN=${{ secrets.NETLIFY_AUTH_TOKEN }}
+          export NETLIFY_SITE_ID=${{ secrets.NETLIFY_SITE_ID }}
+
+      - name: Comment link to deploy
+        if: github.event.name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2.2.0
+        with:
+          header: deploy-preview
+          recreate: true
+          message: |
+            Deploy preview link
+            Latest commit deployed: ${{ github.sha }}
+
+      - name: Update deployment status
+        uses: bobheadxi/deployments@v0.6.2
+        if: always()
+        with:
+          step: finish
+          token: ${{ secrets.GITHUB_TOKEN }}
+          status: ${{ job.status }}
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+          env_url: https://example.com
