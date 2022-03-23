@@ -1,4 +1,4 @@
-name: Push on main and all PRs
+name: Push on main, release and PRs
 
 on:
   push:
