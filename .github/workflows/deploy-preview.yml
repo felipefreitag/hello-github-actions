@@ -43,9 +43,6 @@ jobs:
         run: |
           echo "Using API URL: ${{ env.REACT_APP_API_URL }}"
           echo "Using Netlify alias: ${{ env.NETLIFY_ALIAS }}"
-          echo "window.env = { REACT_APP_API_URL: '${{ env.REACT_APP_API_URL }}' }" > public/env-config.js
-          export NETLIFY_AUTH_TOKEN=${{ secrets.NETLIFY_AUTH_TOKEN }}
-          export NETLIFY_SITE_ID=${{ secrets.NETLIFY_SITE_ID }}
 
       - name: Comment link to deploy
         if: github.event.name == 'pull_request'
