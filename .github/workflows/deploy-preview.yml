@@ -23,12 +23,16 @@ jobs:
         run: |
           echo "REACT_APP_API_URL=https://${{ github.event.inputs.api-heroku-app }}.herokuapp.com"
           echo "NETLIFY_ALIAS=deploy-preview"
+          echo "REACT_APP_API_URL=https://${{ github.event.inputs.api-heroku-app }}.herokuapp.com" >> $GITHUB_ENV
+          echo "NETLIFY_ALIAS=deploy-preview" >> $GITHUB_ENV
 
       - name: Set API app and Netlify alias from PR
         if: github.event.inputs.api-heroku-app == 0
         run: |
           echo "REACT_APP_API_URL=https://${{ env.preview-api }}-pr-${{ github.event.number }}.herokuapp.com"
           echo "NETLIFY_ALIAS=deploy-preview-${{ github.event.number }}"
+          echo "REACT_APP_API_URL=https://${{ env.preview-api }}-pr-${{ github.event.number }}.herokuapp.com" >> $GITHUB_ENV
+          echo "NETLIFY_ALIAS=deploy-preview-${{ github.event.number }}" >> $GITHUB_ENV
 
       - name: start deployment
         uses: bobheadxi/deployments@v0.6.2
