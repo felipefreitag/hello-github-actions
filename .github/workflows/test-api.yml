@@ -71,4 +71,4 @@ jobs:
 
     steps:
       - run: echo "Deploying to staging"
-      - run: echo ${{ github.event }}
+      - run: echo '${{ toJSON(github) }}'
