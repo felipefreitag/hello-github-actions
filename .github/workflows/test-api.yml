@@ -70,6 +70,5 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - run: |
-        echo "Deploying to staging"
-        echo {{ github.event }}
+      - run: echo "Deploying to staging"
+      - run: echo {{ github.event }}
