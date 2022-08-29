@@ -16,6 +16,6 @@ jobs:
           echo '${{ toJSON(github) }}'
       - name: Push main to production branch
         run: |
-          git checkout main
+          git checkout ${{ github.sha }}
           git checkout -B production
           git push origin production --force
