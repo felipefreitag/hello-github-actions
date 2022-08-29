@@ -13,7 +13,7 @@ jobs:
           fetch-depth: 0
       - name: Push main to production branch
         run: |
-          echo {{ github.context }}
+          echo ${{ github.context }}
           git checkout main
           git checkout -B production
           git push origin production --force
